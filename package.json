@@ -1,0 +1,17 @@
+{
+  "name": "ko-validation",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "license": "WTFPL",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Profiscience/ko-validation"
+  },
+  "_": [],
+  "author": "Casey Webb <notcaseywebb@gmail.com>"
+}
