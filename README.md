@@ -7,8 +7,6 @@ ko-validate
 [![Coveralls](https://coveralls.io/repos/github/Profiscience/ko-validate/badge.svg?branch=master)](https://coveralls.io/github/Profiscience/ko-validate?branch=master)
 [![DavidDM](https://img.shields.io/david/Profiscience/ko-validate.svg)](https://david-dm.org/Profiscience/ko-validate)
 
-This package will do super awesome things one day. Today is not that day.
-
 ## Getting Started
 
 #### Install
