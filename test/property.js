@@ -1,19 +1,17 @@
 import ko from 'knockout'
 import test from 'tape'
 
-import applyValidationRules from '../src'
+import createValidatedTree from '../src'
 
 test('property', (t) => {
-  t.test('via applyValidationRules', (t) => {
-    const foo = ko.observable()
-    applyValidationRules(foo, { required: true })
+  t.test('via createValidatedTree', (t) => {
+    const foo = createValidatedTree(ko.observable(), { required: true })
     runTests(t, foo)
     t.end()
   })
 
   t.test('via extender', (t) => {
-    const foo = ko.observable()
-    foo.extend({ validate: { required: true } })
+    const foo = ko.observable().extend({ validate: { required: true } })
     runTests(t, foo)
     t.end()
   })

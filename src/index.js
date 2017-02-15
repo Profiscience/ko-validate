@@ -1,49 +1,43 @@
-import { each, every, includes, keys, some } from 'lodash'
+import { isArray, each, every, extendWith, includes, keys, map, some } from 'lodash'
 import ko from 'knockout'
-import { fromJS } from 'ko-contrib-utils'
 
 import './extender'
 import validators from './validators'
 
-// expose for adding custom validators
 export { validators }
 
-// applies validation to a tree, adding an isValid computed on each
-// validated property, and their containing objects. If an object has multiple
-// validated properties, its isValid computed is a composition of all of them
-export default function applyValidationRules(data, rules) {
-
-  // property/array to be validated must be observable array so that new items
-  // are extended with validators
-  if (isValidationRule(rules)) {
-    if (!ko.isObservable(data)) {
-      throw new Error('[ko-validate] properties/arrays must be observable to validate')
-    }
-    data.extend({ validate: rules })
-
-  // observable object with validated properties
-  } else if (ko.isObservable(data)) {
-    data.isValid = ko.pureComputed(() => {
-      // reform ko.observable({ foo: bar }) => { foo: ko.observable(bar) } so
-      // properties can be validated
-      const _data = fromJS(ko.unwrap(data))
-      // do inside computed so the previos line triggers revalidation
-      applyValidationRulesToAllProperties(_data, rules)
-      return areAllPropertiesValid(_data, rules)
-    })
-
-  // plain object
-  } else {
-    applyValidationRulesToAllProperties(data, rules)
-    data.isValid = ko.pureComputed(() => areAllPropertiesValid(data, rules))
-  }
-
-  // return for safety/convenience (esp. w/ fp)
-  return data
+export default function createValidatedTree(data, rules) {
+  return isValidationRule(rules)
+    ? createValidatedObservable(data, rules)
+    : createValidatedObject(data, rules)
 }
 
-function applyValidationRulesToAllProperties(data, rules) {
-  each(rules, (rule, prop) => applyValidationRules(data[prop], rule))
+export function createValidatedObservable(_obs, rule) {
+  if (!ko.isObservable(_obs)) {
+    throw new Error('[ko-validate] properties/arrays must be observable to validate')
+  }
+
+  let obs
+  if (isArray(ko.unwrap(_obs))) {
+    obs = ko.pureComputed({
+      read: () => map(_obs(), (v) => createValidatedTree(v, rule.each)),
+      write: (v) => _obs(v)
+    })
+    each(keys(ko.observableArray.fn), (fn) => obs[fn] = _obs[fn].bind(_obs))
+  } else {
+    obs = ko.observable(_obs())
+  }
+
+  obs.isValid = ko.pureComputed(() => every(rule, (arg, validator) =>
+    ko.unwrap(arg) === false || validators[validator](obs(), ko.unwrap(arg))))
+
+  return obs
+}
+
+function createValidatedObject(data, rules) {
+  const validated = extendWith({}, data, (dest, src, k) => createValidatedTree(src, rules[k]))
+  validated.isValid = ko.pureComputed(() => areAllPropertiesValid(validated, rules))
+  return validated
 }
 
 function isValidationRule(rule) {

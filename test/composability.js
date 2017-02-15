@@ -1,12 +1,10 @@
 import ko from 'knockout'
 import test from 'tape'
 
-import applyValidationRules from '../src'
+import createValidatedTree from '../src'
 
 test('composability', (t) => {
-  const foo = ko.observable()
-
-  applyValidationRules(foo, { required: true, number: true, min: 0, max: 100 })
+  const foo = createValidatedTree(ko.observable(), { required: true, number: true, min: 0, max: 100 })
 
   t.false(foo.isValid(), 'isValid() === false when no validators pass')
 

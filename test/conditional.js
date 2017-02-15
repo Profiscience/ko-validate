@@ -1,15 +1,14 @@
 import ko from 'knockout'
 import test from 'tape'
 
-import applyValidationRules from '../src'
+import '../src'
 
 test('conditional', (t) => {
-  const foo = ko.observable()
   const required = ko.observable(false)
   const number = ko.observable(false)
   const min = ko.observable(false)
 
-  applyValidationRules(foo, { required, number, min })
+  const foo = ko.observable().extend({ validate: { required, number, min } })
 
   t.true(foo.isValid())
 

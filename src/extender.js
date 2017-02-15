@@ -1,7 +1,4 @@
 import ko from 'knockout'
-import createValidator from './create-validator'
+import { createValidatedObservable } from './index'
 
-ko.extenders.validate = (obs, rule) => {
-  obs.isValid = createValidator(obs, rule)
-  return obs
-}
+ko.extenders.validate = (obs, rules) => createValidatedObservable(obs, rules)
