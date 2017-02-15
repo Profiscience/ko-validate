@@ -1,4 +1,4 @@
-import { isArray, each, every, includes, keys, some } from 'lodash'
+import { each, every, includes, keys, some } from 'lodash'
 import ko from 'knockout'
 import { fromJS } from 'ko-contrib-utils'
 
@@ -6,30 +6,40 @@ import './extender'
 import validators from './validators'
 
 export default function applyValidationRules(data, rules) {
+  // property/array to be validated
   if (isValidationRule(rules)) {
     if (!ko.isObservable(data)) {
-      throw new Error('[ko-validate] properties must be observable to validate')
+      throw new Error('[ko-validate] properties/arrays must be observable to validate')
     }
     data.extend({ validate: rules })
 
-  } else if (isArray(rules)) {
-    if (!ko.isObservable(data)) {
-      throw new Error('[ko-validate] arrays must be observable to validate')
-    }
-    data.extend({ validateArray: [rules] })
-
+  // observable object with validated properties
   } else if (ko.isObservable(data)) {
     data.isValid = ko.pureComputed(() => {
+      // reform ko.observable({ foo: bar }) => { foo: ko.observable(bar) }
+      // so properties can be validated
       const _data = fromJS(ko.unwrap(data))
-      each(rules, (rule, prop) => applyValidationRules(_data[prop], rule))
-      return every(rules, (r, prop) => _data[prop].isValid())
+      applyValidationRulesToAllProperties(_data, rules)
+      return areAllPropertiesValid(_data, rules)
     })
+
+  // plain object
   } else {
-    each(rules, (rule, prop) => applyValidationRules(data[prop], rule))
-    data.isValid = ko.pureComputed(() => every(rules, (r, prop) => data[prop].isValid()))
+    applyValidationRulesToAllProperties(data, rules)
+    data.isValid = ko.pureComputed(() => areAllPropertiesValid(data, rules))
   }
+
+  return data
+}
+
+function applyValidationRulesToAllProperties(data, rules) {
+  each(rules, (rule, prop) => applyValidationRules(data[prop], rule))
 }
 
 function isValidationRule(rule) {
-  return some(keys(rule), (k) => includes(keys(validators), k))
+  return some(keys(rule), (k) => includes(keys(validators).concat('each'), k))
+}
+
+function areAllPropertiesValid(data, rules) {
+  return every(rules, (r, prop) => data[prop].isValid())
 }
