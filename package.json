@@ -48,9 +48,7 @@
   "homepage": "https://github.com/Profiscience/ko-validate#readme",
   "author": "Casey Webb <notcaseywebb@gmail.com>",
   "peerDependencies": {
-    "knockout": "^3.4.0"
-  },
-  "dependencies": {
+    "knockout": "^3.4.0",
     "lodash": "^4.17.4"
   },
   "devDependencies": {
@@ -61,6 +59,7 @@
     "babel-register": "^6.9.0",
     "coveralls": "^2.11.9",
     "knockout": "^3.4.0",
+    "lodash": "^4.17.4",
     "nyc": "^10.0.0",
     "tape": "^4.6.3",
     "webpack": "^2.2.1"
