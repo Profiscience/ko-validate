@@ -5,8 +5,16 @@ import { fromJS } from 'ko-contrib-utils'
 import './extender'
 import validators from './validators'
 
+// expose for adding custom validators
+export { validators }
+
+// applies validation to a tree, adding an isValid computed on each
+// validated property, and their containing objects. If an object has multiple
+// validated properties, its isValid computed is a composition of all of them
 export default function applyValidationRules(data, rules) {
-  // property/array to be validated
+
+  // property/array to be validated must be observable array so that new items
+  // are extended with validators
   if (isValidationRule(rules)) {
     if (!ko.isObservable(data)) {
       throw new Error('[ko-validate] properties/arrays must be observable to validate')
@@ -16,9 +24,10 @@ export default function applyValidationRules(data, rules) {
   // observable object with validated properties
   } else if (ko.isObservable(data)) {
     data.isValid = ko.pureComputed(() => {
-      // reform ko.observable({ foo: bar }) => { foo: ko.observable(bar) }
-      // so properties can be validated
+      // reform ko.observable({ foo: bar }) => { foo: ko.observable(bar) } so
+      // properties can be validated
       const _data = fromJS(ko.unwrap(data))
+      // do inside computed so the previos line triggers revalidation
       applyValidationRulesToAllProperties(_data, rules)
       return areAllPropertiesValid(_data, rules)
     })
@@ -29,6 +38,7 @@ export default function applyValidationRules(data, rules) {
     data.isValid = ko.pureComputed(() => areAllPropertiesValid(data, rules))
   }
 
+  // return for safety/convenience (esp. w/ fp)
   return data
 }
 
@@ -37,9 +47,9 @@ function applyValidationRulesToAllProperties(data, rules) {
 }
 
 function isValidationRule(rule) {
-  return some(keys(rule), (k) => includes(keys(validators).concat('each'), k))
+  return some(keys(rule), (k) => includes(keys(validators), k))
 }
 
 function areAllPropertiesValid(data, rules) {
-  return every(rules, (r, prop) => data[prop].isValid())
+  return every(keys(rules), (k) => data[k].isValid())
 }
