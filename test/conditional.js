@@ -4,45 +4,36 @@ import test from 'tape'
 import applyValidationRules from '../src'
 
 test('conditional', (t) => {
-  t.test('observable', (t) => {
-    const foo = ko.observable()
-    const required = ko.observable(false)
+  const foo = ko.observable()
+  const required = ko.observable(false)
+  const number = ko.observable(false)
+  const min = ko.observable(false)
 
-    applyValidationRules(foo, {
-      required: true,
-      if: required
-    })
+  applyValidationRules(foo, { required, number, min })
 
-    t.true(foo.isValid(), 'isValid() === true when invalid but if() === false')
-    required(true)
-    t.false(foo.isValid(), 'isValid() === false when invalid but if() === false')
+  t.true(foo.isValid())
 
-    foo('foo')
+  required(true)
+  t.false(foo.isValid())
 
-    t.true(foo.isValid(), 'validator still works')
+  foo('foo')
+  t.true(foo.isValid())
 
-    t.end()
-  })
+  number(true)
+  t.false(foo.isValid())
 
-  t.test('function (computed shorthand)', (t) => {
-    const foo = ko.observable()
-    const required = ko.observable(false)
+  foo(1)
+  t.true(foo.isValid())
 
-    applyValidationRules(foo, {
-      required: true,
-      if: () => required()
-    })
+  min(2)
+  t.false(foo.isValid())
 
-    t.true(foo.isValid(), 'isValid() === true when invalid but if() === false')
-    required(true)
-    t.false(foo.isValid(), 'isValid() === false when invalid but if() === false')
+  foo(3)
+  t.true(foo.isValid())
 
-    foo('foo')
-
-    t.true(foo.isValid(), 'validator still works')
-
-    t.end()
-  })
+  foo(undefined)
+  required(false)
+  t.true(foo.isValid())
 
   t.end()
 })
