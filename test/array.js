@@ -32,6 +32,29 @@ test('array', (t) => {
     t.end()
   })
 
+  t.test('composability', (t) => {
+    const foo = ko.observableArray().extend({
+      validate: {
+        min: 1,
+        each: {
+          name: {
+            required: true
+          }
+        }
+      }
+    })
+
+    t.false(foo.isValid())
+
+    foo.push({ name: ko.observable('Casey') })
+    t.true(foo.isValid())
+
+    foo()[0].name('')
+    t.false(foo.isValid())
+
+    t.end()
+  })
+
   t.end()
 })
 

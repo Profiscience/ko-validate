@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "export NODE_ENV=test; nyc --reporter=lcov --reporter=html tape 'test/**/*.js'",
+    "test:watch": "tape-watch -r babel-register 'test/**/*.js'",
     "debug": "iron-node ./node_modules/tape-watch/bin/tape-watch -r babel-register 'test/**/*.js'",
     "build": "webpack",
     "prepublish": "npm run build"
