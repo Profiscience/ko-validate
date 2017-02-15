@@ -10,5 +10,6 @@ export default function createValidator(_obs, rule) {
     ? ko.pureComputed(() => map(_obs(), (v) => applyValidationRules(fromJS(v), rule.each)))
     : _obs
 
-  return ko.pureComputed(() => every(rule, (arg, validator) => ko.unwrap(arg) === false || validators[validator](obs(), ko.unwrap(arg))))
+  return ko.pureComputed(() => every(rule, (arg, validator) =>
+    ko.unwrap(arg) === false || validators[validator](obs(), ko.unwrap(arg))))
 }
