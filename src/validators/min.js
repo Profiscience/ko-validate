@@ -1,3 +1,3 @@
-import { isNumber } from 'lodash'
+import { isNull, isNumber, isUndefined } from 'lodash'
 
-export default (v, min) => v && (isNumber(v) ? v : v.length) >= min
+export default (v, min) => isUndefined(v) || isNull(v) || (isNumber(v) ? v : v.length) >= min

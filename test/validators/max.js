@@ -3,6 +3,9 @@ import test from 'tape'
 import validate from '../../src/validators/max'
 
 test('max', (t) => {
+  t.true(validate(undefined, 1), 'true when undefined')
+  t.true(validate(null, 1), 'true when null')
+
   t.test('number', (t) => {
     t.true(validate(1, 2), 'true when less than max')
     t.true(validate(1, 1), 'true when equal to max')

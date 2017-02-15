@@ -1,3 +1,3 @@
-import { isNumber } from 'lodash'
+import { isNull, isNumber, isUndefined } from 'lodash'
 
-export default (v) => isNumber(v)
+export default (v) => isUndefined(v) || isNull(v) || isNumber(v)

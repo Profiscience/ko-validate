@@ -4,6 +4,7 @@ import validate from '../../src/validators/required'
 
 test('required', (t) => {
   t.false(validate(undefined), 'false when undefined')
+  t.false(validate(null), 'false when null')
   t.false(validate(''), 'false when empty string')
   t.false(validate([]), 'false when empty array')
 
