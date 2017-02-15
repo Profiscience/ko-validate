@@ -55,6 +55,20 @@ test('array', (t) => {
     t.end()
   })
 
+  t.test('without each', (t) => {
+    const foo = ko.observableArray().extend({ validate: { min: 1 } })
+
+    t.false(foo.isValid())
+
+    foo.push({ name: ko.observable('Casey') })
+    t.true(foo.isValid())
+
+    foo.pop()
+    t.false(foo.isValid())
+
+    t.end()
+  })
+
   t.end()
 })
 

@@ -1,4 +1,4 @@
-import { isArray, each, every, extendWith, includes, keys, map, some } from 'lodash'
+import { isUndefined, each, every, extendWith, includes, keys, map, some } from 'lodash'
 import ko from 'knockout'
 
 import './extender'
@@ -14,16 +14,20 @@ export default function createValidatedTree(data, rules) {
 
 export function createValidatedObservable(_obs, rule) {
   if (!ko.isObservable(_obs)) {
-    throw new Error('[ko-validate] properties/arrays must be observable to validate')
+    throw new Error(`[ko-validate] properties/arrays must be observable to validate, ${_obs} was passed`)
   }
 
   let obs
-  if (isArray(ko.unwrap(_obs))) {
-    obs = ko.pureComputed({
-      read: () => map(_obs(), (v) => createValidatedTree(v, rule.each)),
-      write: (v) => _obs(v)
-    })
-    each(keys(ko.observableArray.fn), (fn) => obs[fn] = _obs[fn].bind(_obs))
+  if (!isUndefined(_obs.push)) {
+    if (rule.each) {
+      obs = ko.pureComputed({
+        read: () => map(_obs(), (v) => createValidatedTree(v, rule.each)),
+        write: (v) => _obs(v)
+      })
+      each(keys(ko.observableArray.fn), (fn) => obs[fn] = _obs[fn].bind(_obs))
+    } else {
+      obs = ko.observableArray(_obs())
+    }
   } else {
     obs = ko.observable(_obs())
   }
