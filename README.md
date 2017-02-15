@@ -23,7 +23,7 @@ $ npm install -S ko-validate
 
 #### Usage
 
-```
+```javascript
 import validate from 'ko-validate'
 
 const foos = {
