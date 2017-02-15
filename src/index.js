@@ -2,9 +2,8 @@ import { isArray, each, every, includes, keys, some } from 'lodash'
 import ko from 'knockout'
 import { fromJS } from 'ko-contrib-utils'
 
+import './extender'
 import validators from './validators'
-import './extenders/validate'
-import './extenders/validateArray'
 
 export default function applyValidationRules(data, rules) {
   if (isValidationRule(rules)) {

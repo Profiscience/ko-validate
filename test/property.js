@@ -3,7 +3,7 @@ import test from 'tape'
 
 import applyValidationRules from '../src'
 
-test('single property', (t) => {
+test('property', (t) => {
   t.test('via applyValidationRules', (t) => {
     const foo = ko.observable()
 

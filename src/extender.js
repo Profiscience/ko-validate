@@ -1,8 +1,8 @@
 import { isArray, each, every, omit } from 'lodash'
 import ko from 'knockout'
 
-import applyValidationRules from '../'
-import validators from '../validators'
+import applyValidationRules from './'
+import validators from './validators'
 
 ko.extenders.validate = (obs, rule) => {
   if (isArray(obs)) {
