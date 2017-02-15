@@ -4,9 +4,6 @@ import test from 'tape'
 import applyValidationRules from '../src'
 
 test('single property', (t) => {
-
-  t.ok('foobar')
-
   t.test('via applyValidationRules', (t) => {
     const foo = ko.observable()
 
@@ -30,4 +27,6 @@ test('single property', (t) => {
 
     t.end()
   })
+
+  t.end()
 })

@@ -1,4 +1,4 @@
-import { isArray, each, every } from 'lodash'
+import { isArray, each, every, omit } from 'lodash'
 import ko from 'knockout'
 
 import applyValidationRules from '../'
@@ -14,6 +14,8 @@ ko.extenders.validate = (obs, rule) => {
 }
 
 function validateArray(_arr, rule) {
+  const shouldValidate = getConditional(rule)
+
   const validated = ko.pureComputed({
     read: () => {
       each(_arr(), (v) => applyValidationRules(v, rule))
@@ -22,7 +24,7 @@ function validateArray(_arr, rule) {
     write: (vs) => _arr(vs)
   })
 
-  validated.isValid = ko.pureComputed(() => every(validated(), (x) => x.isValid()))
+  validated.isValid = ko.pureComputed(() => !shouldValidate() || every(validated(), (x) => x.isValid()))
 
   each(ko.observableArray.fn, (fn, name) => validated[name] = () => _arr[fn](...arguments))
 
@@ -30,5 +32,12 @@ function validateArray(_arr, rule) {
 }
 
 function createValidator(obs, rule) {
-  return ko.pureComputed(() => every(rule, (arg, validator) => validators[validator](obs(), arg)))
+  const shouldValidate = getConditional(rule)
+  return ko.pureComputed(() => !shouldValidate() || every(omit(rule, 'if'), (arg, validator) => validators[validator](obs(), arg)))
+}
+
+function getConditional(rule) {
+  return rule.if
+    ? (ko.isObservable(rule.if) ? rule.if : ko.pureComputed(() => rule.if()))
+    : ko.observable(true)
 }
