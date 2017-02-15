@@ -1,5 +1,5 @@
 {
-  "name": "ko-validation",
+  "name": "ko-validate",
   "version": "0.0.0",
   "description": "Simpler Validation for Knockout JS",
   "main": "index.js",
@@ -42,12 +42,12 @@
   "license": "WTFPL",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Profiscience/ko-validation"
+    "url": "https://github.com/Profiscience/ko-validate"
   },
   "bugs": {
-    "url": "https://github.com/Profiscience/ko-validation/issues"
+    "url": "https://github.com/Profiscience/ko-validate/issues"
   },
-  "homepage": "https://github.com/Profiscience/ko-validation#readme",
+  "homepage": "https://github.com/Profiscience/ko-validate#readme",
   "author": "Casey Webb <notcaseywebb@gmail.com>",
   "peerDependencies": {
     "knockout": "^3.4.0"

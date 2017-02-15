@@ -13,8 +13,8 @@ function makeConfig({ minify } = {}) {
 
     output: {
       path: 'dist',
-      filename: minify ? 'ko-validation.min.js' : 'ko-validation.js',
-      library:  'ko-validation',
+      filename: minify ? 'ko-validate.min.js' : 'ko-validate.js',
+      library:  'ko-validate',
       libraryTarget: 'umd'
     },
 

@@ -9,13 +9,13 @@ import './extenders/validateArray'
 export default function applyValidationRules(data, rules) {
   if (isValidationRule(rules)) {
     if (!ko.isObservable(data)) {
-      throw new Error('[ko-validation] properties must be observable to validate')
+      throw new Error('[ko-validate] properties must be observable to validate')
     }
     data.extend({ validate: rules })
 
   } else if (isArray(rules)) {
     if (!ko.isObservable(data)) {
-      throw new Error('[ko-validation] arrays must be observable to validate')
+      throw new Error('[ko-validate] arrays must be observable to validate')
     }
     data.extend({ validateArray: [rules] })
 
