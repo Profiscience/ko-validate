@@ -1,6 +1,8 @@
 ko-validation
 ================
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/Profiscience/ko-validation.svg)](https://greenkeeper.io/)
+
 ![NPM](https://img.shields.io/npm/v/ko-validation.svg)
 ![License](https://img.shields.io/npm/l/ko-validation.svg)
 [![Travis](https://img.shields.io/travis/Profiscience/ko-validation.svg)](https://travis-ci.org/Profiscience/ko-validation)
