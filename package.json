@@ -1,17 +1,77 @@
 {
   "name": "ko-validation",
   "version": "0.0.0",
-  "description": "",
+  "description": "Simpler Validation for Knockout JS",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "export NODE_ENV=test; nyc --reporter=lcov --reporter=html tape 'test/**/*.js'",
+    "debug": "iron-node ./node_modules/tape-watch/bin/tape-watch -r babel-register 'test/**/*.js'",
+    "build": "webpack",
+    "prepublish": "npm run build"
   },
-  "keywords": [],
+  "babel": {
+    "presets": [
+      "es2015"
+    ],
+    "plugins": [
+      "transform-es2015-modules-commonjs"
+    ],
+    "env": {
+      "test": {
+        "plugins": [
+          "istanbul"
+        ]
+      }
+    }
+  },
+  "nyc": {
+    "include": [
+      "src/**/*.js"
+    ],
+    "require": [
+      "babel-register"
+    ],
+    "sourceMap": false,
+    "instrument": false
+  },
+  "keywords": [
+    "knockout",
+    "knockoutjs",
+    "validation"
+  ],
   "license": "WTFPL",
   "repository": {
     "type": "git",
     "url": "https://github.com/Profiscience/ko-validation"
   },
-  "_": [],
-  "author": "Casey Webb <notcaseywebb@gmail.com>"
+  "bugs": {
+    "url": "https://github.com/Profiscience/ko-validation/issues"
+  },
+  "homepage": "https://github.com/Profiscience/ko-validation#readme",
+  "author": "Casey Webb <notcaseywebb@gmail.com>",
+  "peerDependencies": {
+    "knockout": "^3.4.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.9.0",
+    "babel-core": "^6.10.4",
+    "babel-loader": "^6.2.4",
+    "babel-plugin-istanbul": "^4.0.0",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.8.0",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-register": "^6.9.0",
+    "coveralls": "^2.11.9",
+    "eslint": "^3.0.1",
+    "eslint-config-profiscience": "^1.0.1",
+    "iron-node": "^3.0.17",
+    "knockout": "^3.4.0",
+    "nyc": "^10.0.0",
+    "tape": "^4.6.3",
+    "tape-watch": "^2.2.4",
+    "webpack": "^2.2.1"
+  },
+  "dependencies": {
+    "ko-contrib-utils": "^0.2.1",
+    "lodash": "^4.17.4"
+  }
 }
