@@ -73,3 +73,10 @@ foos.foo.isValid() // false
 foos.bar.isValid() // true
 foos.bar.baz.isValid() // true
 ```
+
+#### What About Validation Messages?
+
+Write your own. Make your error messages meaningful. Default/automatic validation messages
+feel robotic and often a) lack context, b) use jargon **your users don't understand**.
+Custom bindings and components are easy to create for consistent validation messages
+across your app.
