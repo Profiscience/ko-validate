@@ -1,5 +1,6 @@
 'use strict' // eslint-disable-line
 
+const path = require('path')
 const webpack = require('webpack')
 
 module.exports = [
@@ -9,10 +10,10 @@ module.exports = [
 
 function makeConfig({ minify } = {}) {
   return {
-    entry: './src/index.js',
+    entry: path.resolve('./src/index.js'),
 
     output: {
-      path: 'dist',
+      path: path.resolve('dist'),
       filename: minify ? 'ko-validate.min.js' : 'ko-validate.js',
       library:  'ko-validate',
       libraryTarget: 'umd'
